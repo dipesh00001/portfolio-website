@@ -1,162 +1,382 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dipesh Prajapati - CV</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dipesh Prajapati </title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
-        .cv-container {
-            max-width: 900px;
-            background: white;
-            margin: auto;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
-        }
+<style>
+:root{
+    --bg:#f4f7fc;
+    --text:#111;
+    --card:#fff;
+    --primary:#1e3a8a;
+}
 
-        .header {
-            text-align: center;
-            border-bottom: 2px solid #333;
-            padding-bottom: 15px;
-        }
+body.dark{
+    --bg:#0f172a;
+    --text:#f1f5f9;
+    --card:#1e293b;
+    --primary:#38bdf8;
+}
 
-        .header h1 {
-            margin: 0;
-            color: #222;
-        }
+body{
+    margin:0;
+    font-family:Segoe UI, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    transition:0.3s;
+}
 
-        .header p {
-            margin: 5px 0;
-            color: #555;
-        }
+/* NAV */
+nav{
+    background:var(--primary);
+    padding:15px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
 
-        .section {
-            margin-top: 25px;
-        }
+nav .logo{
+    color:white;
+    font-weight:bold;
+    font-size:20px;
+}
 
-        .section h2 {
-            color: #333;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 5px;
-        }
+nav ul{
+    list-style:none;
+    display:flex;
+    gap:15px;
+}
 
-        ul {
-            padding-left: 20px;
-        }
+nav ul li a{
+    color:white;
+    text-decoration:none;
+}
 
-        .skills span {
-            display: inline-block;
-            background: #333;
-            color: white;
-            padding: 8px 12px;
-            margin: 5px;
-            border-radius: 5px;
-        }
+.top-actions{
+    display:flex;
+    gap:10px;
+}
 
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #777;
-        }
-    </style>
+.btn{
+    border:none;
+    padding:8px 12px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.btn-dark{ background:#111; color:#fff; }
+.btn-pdf{ background:#16a34a; color:#fff; }
+
+/* DASHBOARD */
+.dashboard{
+    text-align:center;
+    padding:70px 20px;
+    background:linear-gradient(135deg,var(--primary),#2563eb);
+    color:white;
+}
+
+.dashboard h1{ font-size:40px; }
+
+/* SECTIONS */
+section{
+    padding:60px 10%;
+}
+
+.section-title{
+    text-align:center;
+    font-size:30px;
+    margin-bottom:20px;
+}
+
+/* CARD */
+.card{
+    background:var(--card);
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.1);
+    margin-top:10px;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:scale(1.02);
+}
+
+/* SKILLS */
+.progress{
+    background:#ccc;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:12px;
+    background:var(--primary);
+}
+
+/* MAP */
+#map{
+    height:400px;
+    border-radius:12px;
+}
+
+.card h3{
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.card p{
+    line-height: 1.5;
+}
+
+/* CONTACT */
+.contact-box{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:15px;
+}
+
+.contact-item{
+    background:var(--card);
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* FOOTER */
+footer{
+    text-align:center;
+    padding:15px;
+    background:var(--primary);
+    color:white;
+}
+</style>
 </head>
 
 <body>
 
-    <div class="cv-container">
+<!-- NAV -->
+<nav>
+    <div class="logo">Dipesh CV</div>
 
-        <!-- Header -->
-        <div class="header">
-            <h1>Dipesh Prajapati</h1>
-            <p>Geomatics Engineering Student</p>
-            <p>Email: dipeshpraja70@email.com | Phone: +977-9840076257</p>
-            <p>Kathmandu, Nepal</p>
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#map-section">Location</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contacts">Contact</a></li>
+    </ul>
+
+    <div class="top-actions">
+        <button class="btn btn-dark" onclick="toggleDark()">🌙 Dark Mode</button>
+        <button class="btn btn-pdf" onclick="downloadPDF()">📄 Download CV</button>
+    </div>
+</nav>
+
+<!-- DASHBOARD -->
+<section class="dashboard">
+    <h1>Dipesh Prajapati</h1>
+    <p>Geomatics Engineer</p>
+</section>
+
+<!-- HOME -->
+<section id="home">
+    <h2 class="section-title">Home</h2>
+    <div class="card">
+        I am a hardworking and dedicated individual with a strong passion for learning and personal growth. I am highly motivated, reliable, and committed to giving my best in every task I undertake. I enjoy taking on challenges, improving my skills, and adapting to new environments. I am focused on building a responsible and disciplined approach toward work while continuously striving to achieve better results and contribute positively wherever I work.    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <h2 class="section-title">About</h2>
+    <div class="card">
+        I am Dipesh Prajapati, a Geomatics Engineering student with a strong interest in geospatial technologies, surveying, remote sensing, and GIS applications. I am passionate about applying spatial data analysis and modern geoinformation tools to solve real-world problems in planning, mapping, and infrastructure development. I am a motivated and detail-oriented learner seeking opportunities to enhance my technical skills and contribute effectively to geospatial and engineering projects.
+    </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+    <h2 class="section-title">Skills</h2>
+
+    <p>GIS</p>
+    <div class="progress"><div class="progress-bar" style="width:90%"></div></div>
+
+    <p>Remote Sensing</p>
+    <div class="progress"><div class="progress-bar" style="width:85%"></div></div>
+
+    <p>Surveying</p>
+    <div class="progress"><div class="progress-bar" style="width:88%"></div></div>
+
+    <p>HTML / CSS</p>
+    <div class="progress"><div class="progress-bar" style="width:80%"></div></div>
+
+     <p>Python</p>
+    <div class="progress"><div class="progress-bar" style="width:90%"></div></div>
+
+     <p>Java</p>
+    <div class="progress"><div class="progress-bar" style="width:90%"></div></div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+    <h2 class="section-title">Education</h2>
+
+    <div class="card" onclick="goToLocation('khwopa')" style="cursor:pointer;">
+        <h3>+2 Level</h3>
+        <p>Khwopa Secondary School</p>
+        <small>📍 Click to view location</small>
+    </div>
+
+    <div class="card" onclick="goToLocation('ku')" style="cursor:pointer;">
+        <h3>Bachelor</h3>
+        <p>Kathmandu University - Geomatics Engineering</p>
+        <small>📍 Click to view location</small>
+    </div>
+</section>
+
+<!-- MAP -->
+<section id="map-section">
+    <h2 class="section-title">Locations</h2>
+    <div id="map"></div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+    <h2 class="section-title">Projects</h2>
+
+    <div class="card">
+        <h3>🌍 Interactive CV with Leaflet Map</h3>
+        <p>
+            Developed a personal CV website using HTML, CSS, and JavaScript with Leaflet.js integration.
+            Includes interactive map, clickable education locations, dark mode, and PDF export feature.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>🛰️ Land Use / Land Cover (LULC) Mapping</h3>
+        <p>
+            Performed supervised and unsupervised classification of satellite imagery.
+            Identified forest, urban, water, and agricultural land using GIS tools like QGIS and ArcGIS.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>🏗️ Digital Elevation Model (DEM) Analysis</h3>
+        <p>
+            Generated slope, elevation, and terrain analysis using DEM data for environmental and hazard studies.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>🌊 Flood Risk Mapping</h3>
+        <p>
+            Created flood hazard maps using elevation, rainfall, and land use data for disaster risk assessment.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>🏙️ Urban Growth Analysis</h3>
+        <p>
+            Analyzed urban expansion using multi-temporal satellite images to study city growth patterns.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>📡 GPS Survey Project</h3>
+        <p>
+            Collected field data using GPS devices and processed coordinates for spatial mapping and analysis.
+        </p>
+    </div>
+
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+    <h2 class="section-title">Contact Me</h2>
+
+    <div class="contact-box">
+
+        <div class="contact-item">
+            📍 <h3>Address</h3>
+            <p>Thimi, Bhaktapur</p>
         </div>
 
-        <!-- About Me -->
-        <div class="section">
-            <h2>Profile</h2>
-            <p>
-                Motivated and enthusiastic Geomatics Engineering student with
-                interest in GIS, Remote Sensing, Surveying, Mapping, and Web Technologies.
-                Passionate about learning modern technologies and applying engineering
-                skills to solve real-world spatial problems.
-            </p>
+        <div class="contact-item">
+            📧 <h3>Email</h3>
+            <p>dipeshpraja70@gmail.com</p>
         </div>
 
-        <!-- Education -->
-        <div class="section">
-            <h2>Education</h2>
-
-            <h3>Bachelor in Geomatics Engineering</h3>
-            <p>
-                Kathmandu University<br>
-                Currently Studying
-            </p>
+        <div class="contact-item">
+            📞 <h3>Phone</h3>
+            <p>+977-9840076257</p>
         </div>
 
-        <!-- Skills -->
-        <div class="section">
-            <h2>Skills</h2>
-
-            <div class="skills">
-                <span>GIS</span>
-                <span>Remote Sensing</span>
-                <span>Surveying</span>
-                <span>HTML</span>
-                <span>CSS</span>
-                <span>JavaScript</span>
-                <span>Python</span>
-                <span>AutoCAD</span>
-            </div>
-        </div>
-
-        <!-- Projects -->
-        <div class="section">
-            <h2>Projects</h2>
-
-            <ul>
-                <li>Earthquake Damage Prediction using Machine Learning</li>
-                <li>Web-based GIS Application using Streamlit</li>
-                <li>Land Use Mapping and Spatial Analysis</li>
-            </ul>
-        </div>
-
-        <!-- Languages -->
-        <div class="section">
-            <h2>Languages</h2>
-
-            <ul>
-                <li>English</li>
-                <li>Nepali</li>
-            </ul>
-        </div>
-
-        <!-- Hobbies -->
-        <div class="section">
-            <h2>Hobbies</h2>
-
-            <ul>
-                <li>Photography</li>
-                <li>Traveling</li>
-                <li>Technology Exploration</li>
-            </ul>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <p>© 2026 Dipesh Prajapati</p>
+        <div class="contact-item">
+            🌐 <h3>Social</h3>
+            <p>linkedin.com/in/dipesh-prajapati-b997b2357</p>
         </div>
 
     </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    © Dipesh Prajapati
+</footer>
+
+<!-- LEAFLET -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+// MAP INIT
+var map = L.map('map').setView([27.7172, 85.3240], 11);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap'
+}).addTo(map);
+
+// ✅ CORRECT LOCATIONS
+var khwopa = [27.678008419778127, 85.43299868465672]; // Dekocha, Bhaktapur-6,27.678008419778127, 85.43299868465672
+var ku = [27.6192, 85.5388];     // Kathmandu University
+
+var marker;
+
+// CLICK FUNCTION
+function goToLocation(place){
+
+    if(marker){
+        map.removeLayer(marker);
+    }
+
+    if(place === "khwopa"){
+        map.setView(khwopa, 17);
+        marker = L.marker(khwopa).addTo(map)
+        .bindPopup("🏫 Khwopa Secondary School<br>Dekocha, Bhaktapur-6, Nepal")
+        .openPopup();
+    }
+
+    if(place === "ku"){
+        map.setView(ku, 16);
+        marker = L.marker(ku).addTo(map)
+        .bindPopup("🎓 Kathmandu University<br>Dhulikhel, Nepal")
+        .openPopup();
+    }
+}
+
+</script>
 
 </body>
 </html>
