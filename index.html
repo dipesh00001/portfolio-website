@@ -124,7 +124,7 @@ section{
 }
 
 /* MAP */
-#map{
+#map, #tourismMap{
     height:400px;
     border-radius:12px;
 }
@@ -177,6 +177,7 @@ footer{
         <li><a href="#map-section">Location</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#contacts">Contact</a></li>
+        <li><a href="#tourism">Tourism Dashboard</a></li>
     </ul>
 
     <div class="top-actions">
@@ -295,7 +296,7 @@ footer{
 </section>
 
 <!-- CONTACT -->
-<section id="contact">
+<section id="contacts">
     <h2 class="section-title">Contact Me</h2>
 
     <div class="contact-box">
@@ -321,6 +322,12 @@ footer{
         </div>
 
     </div>
+</section>
+
+<!-- GIS DASHBOARD (LAST) -->
+<section id="tourism">
+    <h2 class="section-title">Tourism Choropleth Dashboard</h2>
+    <div id="tourismMap"></div>
 </section>
 
 <!-- FOOTER -->
@@ -367,6 +374,104 @@ function goToLocation(place){
         .openPopup();
     }
 }
+
+var tourismMap = L.map('tourismMap').setView([27.7,85.3], 10);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(tourismMap);
+
+// GeoJSON DATA
+var data = {
+"type":"FeatureCollection",
+"features":[
+{"type":"Feature","properties":{"name":"Kathmandu","tourism":95},"geometry":{"type":"Polygon","coordinates":[[[85.25,27.75],[85.35,27.75],[85.35,27.65],[85.25,27.65],[85.25,27.75]]]}},
+{"type":"Feature","properties":{"name":"Bhaktapur","tourism":80},"geometry":{"type":"Polygon","coordinates":[[[85.40,27.72],[85.48,27.72],[85.48,27.66],[85.40,27.66],[85.40,27.72]]]}},
+{"type":"Feature","properties":{"name":"Lalitpur","tourism":88},"geometry":{"type":"Polygon","coordinates":[[[85.28,27.68],[85.36,27.68],[85.36,27.60],[85.28,27.60],[85.28,27.68]]]}},
+{
+"type":"Feature",
+"properties":{"name":"Pokhara","tourism":92},
+"geometry":{"type":"Polygon","coordinates":[[[83.95,28.25],[84.05,28.25],[84.05,28.15],[83.95,28.15],[83.95,28.25]]]}
+},
+{
+"type":"Feature",
+"properties":{"name":"Chitwan","tourism":85},
+"geometry":{"type":"Polygon","coordinates":[[[84.40,27.70],[84.55,27.70],[84.55,27.55],[84.40,27.55],[84.40,27.70]]]}
+},
+{
+"type":"Feature",
+"properties":{"name":"Lumbini","tourism":90},
+"geometry":{"type":"Polygon","coordinates":[[[83.50,27.55],[83.65,27.55],[83.65,27.40],[83.50,27.40],[83.50,27.55]]]}
+},
+{
+"type":"Feature",
+"properties":{"name":"Mustang","tourism":75},
+"geometry":{"type":"Polygon","coordinates":[[[83.80,29.20],[84.20,29.20],[84.20,28.90],[83.80,28.90],[83.80,29.20]]]}
+},
+{
+"type":"Feature",
+"properties":{"name":"Manang","tourism":70},
+"geometry":{"type":"Polygon","coordinates":[[[84.20,28.90],[84.50,28.90],[84.50,28.60],[84.20,28.60],[84.20,28.90]]]}
+}
+]
+};
+
+// COLOR FUNCTION
+function getColor(d){
+return d>90?'#800026':
+       d>80?'#BD0026':
+       d>70?'#E31A1C':
+       d>60?'#FC4E2A':
+       '#FFEDA0';
+}
+
+function style(feature){
+return {
+fillColor:getColor(feature.properties.tourism),
+weight:2,
+color:"#fff",
+fillOpacity:0.7
+};
+}
+
+// INFO BOX
+var info = L.control();
+
+info.onAdd=function(){
+this._div=L.DomUtil.create('div','info');
+this.update();
+return this._div;
+};
+
+info.update=function(props){
+this._div.innerHTML="<h4>Tourism Index</h4>"+(props?
+"<b>"+props.name+"</b><br>"+props.tourism+"/100"
+:"Hover over region");
+};
+
+info.addTo(tourismMap);
+
+// HOVER EFFECT
+function highlight(e){
+var layer=e.target;
+layer.setStyle({weight:3,color:"#666"});
+info.update(layer.feature.properties);
+}
+
+function reset(e){
+geojson.resetStyle(e.target);
+info.update();
+}
+
+function onEachFeature(feature,layer){
+layer.on({
+mouseover:highlight,
+mouseout:reset
+});
+}
+
+var geojson=L.geoJson(data,{
+style:style,
+onEachFeature:onEachFeature
+}).addTo(tourismMap);
 
 </script>
 
