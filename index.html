@@ -3,475 +3,985 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dipesh Prajapati </title>
+<title>Dipesh Prajapati — Geomatics Portfolio</title>
 
-<!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap" rel="stylesheet">
 
 <style>
 :root{
-    --bg:#f4f7fc;
-    --text:#111;
-    --card:#fff;
-    --primary:#1e3a8a;
+    --navy:#16243F;
+    --navy-deep:#0E1830;
+    --teal:#2B6E6E;
+    --teal-light:#6FA5A5;
+    --cream:#F6F3EC;
+    --paper:#FCFAF5;
+    --amber:#C97D2E;
+    --ink:#1A1A1A;
+    --ink-soft:#4A5160;
+    --line:#D8D4C8;
+    --line-soft:#E7E3D8;
+    --white:#ffffff;
+    --sidebar-w:300px;
+
+    --display:'Space Grotesk', sans-serif;
+    --mono:'JetBrains Mono', monospace;
+    --serif:'Source Serif 4', serif;
 }
 
-body.dark{
-    --bg:#0f172a;
-    --text:#f1f5f9;
-    --card:#1e293b;
-    --primary:#38bdf8;
-}
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
 
 body{
     margin:0;
-    font-family:Segoe UI, sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    transition:0.3s;
+    font-family:var(--display);
+    background:var(--paper);
+    color:var(--ink);
 }
 
-/* NAV */
-nav{
-    background:var(--primary);
-    padding:15px 25px;
+::selection{ background:var(--amber); color:#fff; }
+
+a{ color:inherit; }
+
+/* ═════════ LAYOUT SHELL ═════════ */
+.shell{
     display:flex;
-    justify-content:space-between;
-    align-items:center;
+    min-height:100vh;
+}
+
+/* ═════════ SIDEBAR ═════════ */
+.sidebar{
+    width:var(--sidebar-w);
+    flex-shrink:0;
+    background:var(--navy-deep);
+    color:var(--cream);
     position:sticky;
     top:0;
-    z-index:1000;
+    height:100vh;
+    overflow-y:auto;
+    padding:40px 28px 32px;
+    border-right:1px solid rgba(255,255,255,0.06);
 }
+.sidebar::-webkit-scrollbar{ width:6px; }
+.sidebar::-webkit-scrollbar-thumb{ background:rgba(255,255,255,0.15); border-radius:3px; }
 
-nav .logo{
-    color:white;
-    font-weight:bold;
-    font-size:20px;
-}
-
-nav ul{
-    list-style:none;
+.avatar{
+    width:108px;
+    height:108px;
+    border-radius:50%;
+    border:2px solid var(--amber);
+    margin:0 auto 20px;
     display:flex;
-    gap:15px;
+    align-items:center;
+    justify-content:center;
+    background:rgba(255,255,255,0.04);
+    font-family:var(--mono);
+    font-size:11px;
+    color:rgba(246,243,236,0.4);
+    text-align:center;
+    line-height:1.4;
+    position:relative;
+}
+.avatar .initials{
+    font-family:var(--display);
+    font-size:34px;
+    font-weight:700;
+    color:rgba(246,243,236,0.85);
+}
+.avatar .add-photo{
+    position:absolute;
+    bottom:-4px;
+    right:-2px;
+    background:var(--amber);
+    color:var(--navy-deep);
+    font-size:13px;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:2px solid var(--navy-deep);
 }
 
-nav ul li a{
-    color:white;
-    text-decoration:none;
+.sidebar .s-name{
+    text-align:center;
+    font-size:21px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    margin-bottom:4px;
+}
+.sidebar .s-role{
+    text-align:center;
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:14.5px;
+    color:rgba(246,243,236,0.65);
+    margin-bottom:24px;
+    line-height:1.4;
 }
 
-.top-actions{
+.s-coord{
+    text-align:center;
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--teal-light);
+    letter-spacing:0.06em;
+    margin-bottom:28px;
+    padding-bottom:24px;
+    border-bottom:1px dashed rgba(255,255,255,0.15);
+}
+
+.s-block{ margin-bottom:28px; }
+.s-block:last-child{ margin-bottom:0; }
+.s-block h4{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.1em;
+    color:var(--amber);
+    margin:0 0 14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+.s-block h4::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:rgba(255,255,255,0.12);
+}
+
+.s-contact-item{
     display:flex;
     gap:10px;
+    align-items:flex-start;
+    font-size:12.5px;
+    color:rgba(246,243,236,0.75);
+    margin-bottom:12px;
+    line-height:1.5;
+    word-break:break-word;
+}
+.s-contact-item:last-child{ margin-bottom:0; }
+.s-contact-item .ico{ flex-shrink:0; opacity:0.8; }
+.s-contact-item a{ text-decoration:none; }
+.s-contact-item a:hover{ color:#fff; text-decoration:underline; }
+
+.tag-group{ display:flex; flex-wrap:wrap; gap:7px; }
+.tag{
+    font-family:var(--mono);
+    font-size:11px;
+    padding:5px 10px;
+    border-radius:3px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1);
+    color:rgba(246,243,236,0.8);
 }
 
-.btn{
-    border:none;
-    padding:8px 12px;
-    border-radius:6px;
+.btn-print{
+    width:100%;
+    margin-top:8px;
+    border:1px solid rgba(255,255,255,0.18);
+    background:transparent;
+    color:rgba(255,255,255,0.85);
+    padding:10px 14px;
+    border-radius:4px;
     cursor:pointer;
-    font-weight:bold;
+    font-weight:500;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.03em;
+    transition:all 0.2s ease;
+}
+.btn-print:hover{ border-color:var(--amber); color:var(--amber); }
+
+/* ═════════ MAIN CONTENT ═════════ */
+.main{
+    flex:1;
+    min-width:0;
+    position:relative;
 }
 
-.btn-dark{ background:#111; color:#fff; }
-.btn-pdf{ background:#16a34a; color:#fff; }
-
-/* DASHBOARD */
-.dashboard{
-    text-align:center;
-    padding:70px 20px;
-    background:linear-gradient(135deg,var(--primary),#2563eb);
-    color:white;
+.graticule{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    opacity:0.4;
+    background-image:
+        linear-gradient(var(--line-soft) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+    background-size:64px 64px;
 }
 
-.dashboard h1{ font-size:40px; }
-
-/* SECTIONS */
-section{
-    padding:60px 10%;
+.main-inner{
+    position:relative;
+    z-index:1;
+    max-width:920px;
+    margin:0 auto;
+    padding:56px 48px 90px;
 }
 
-.section-title{
-    text-align:center;
-    font-size:30px;
-    margin-bottom:20px;
+/* top mini-nav */
+.mini-nav{
+    display:flex;
+    gap:22px;
+    flex-wrap:wrap;
+    margin-bottom:56px;
+    padding-bottom:18px;
+    border-bottom:1px solid var(--line);
 }
+.mini-nav a{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-soft);
+    text-decoration:none;
+    letter-spacing:0.03em;
+}
+.mini-nav a:hover{ color:var(--amber); }
 
-/* CARD */
+.section-head{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    margin-bottom:30px;
+}
+.section-head .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--amber);
+    letter-spacing:0.1em;
+    white-space:nowrap;
+}
+.section-head h2{
+    font-size:clamp(24px,3vw,30px);
+    margin:0;
+    font-weight:600;
+    letter-spacing:-0.01em;
+}
+.section-head .rule{ flex:1; height:1px; background:var(--line); }
+
+.m-section{ margin-bottom:72px; }
+.m-section:last-child{ margin-bottom:0; }
+
+.prose{
+    max-width:640px;
+    font-family:var(--serif);
+    font-size:17px;
+    line-height:1.75;
+    color:var(--ink);
+}
+.prose b{ color:var(--navy); font-weight:600; }
+
+/* timeline (education) */
+.timeline{
+    position:relative;
+    padding-left:26px;
+    border-left:1.5px dashed var(--line);
+}
+.timeline-item{ position:relative; padding-bottom:30px; }
+.timeline-item:last-child{ padding-bottom:0; }
+.timeline-item::before{
+    content:"";
+    position:absolute;
+    left:-31.5px; top:4px;
+    width:9px; height:9px;
+    border-radius:50%;
+    background:var(--paper);
+    border:2px solid var(--amber);
+}
+.timeline-item .tl-period{
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--amber);
+    letter-spacing:0.05em;
+}
+.timeline-item h3{ margin:4px 0 3px; font-size:18px; color:var(--navy); font-weight:600; }
+.timeline-item p{ margin:0; color:var(--ink-soft); font-size:14px; }
+
+/* card grid */
+.card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+    gap:16px;
+}
 .card{
-    background:var(--card);
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 3px 10px rgba(0,0,0,0.1);
-    margin-top:10px;
-    transition:0.3s;
+    background:var(--white);
+    padding:22px 24px;
+    border-radius:6px;
+    border:1px solid var(--line);
+    transition:border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
-
 .card:hover{
-    transform:scale(1.02);
+    border-color:var(--teal);
+    transform:translateY(-2px);
+    box-shadow:0 10px 24px -16px rgba(22,36,63,0.35);
 }
+.card .c-id{
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--teal);
+    letter-spacing:0.08em;
+    display:block;
+    margin-bottom:6px;
+}
+.card h3{ color:var(--navy); margin:0 0 8px; font-size:16.5px; font-weight:600; display:flex; gap:8px; align-items:center; }
+.card p{ line-height:1.6; color:var(--ink-soft); margin:0; font-size:14px; }
 
-/* SKILLS */
-.progress{
-    background:#ccc;
-    border-radius:20px;
+/* featured project card (Safe Nepal) */
+.featured-project{
+    padding:28px 30px;
+    background:linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 100%);
+    border-color:var(--navy);
+    color:var(--cream);
+}
+.featured-project:hover{
+    border-color:var(--amber);
+    box-shadow:0 14px 30px -18px rgba(14,24,48,0.55);
+}
+.featured-project .c-id{ color:var(--teal-light); }
+.featured-project h3{ color:#fff; font-size:19px; }
+.featured-project p{ color:rgba(246,243,236,0.78); font-size:14.5px; max-width:640px; }
+.proj-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; margin-bottom:18px; }
+.proj-tags span{
+    font-family:var(--mono);
+    font-size:10.5px;
+    padding:5px 10px;
+    border-radius:3px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.14);
+    color:rgba(246,243,236,0.8);
+}
+.btn-view-project{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--amber);
+    color:var(--navy-deep);
+    font-family:var(--mono);
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.03em;
+    padding:11px 20px;
+    border-radius:4px;
+    text-decoration:none;
+    transition:background 0.2s ease, transform 0.2s ease;
+}
+.btn-view-project:hover{ background:#dd8c38; transform:translateY(-1px); }
+
+/* simple list rows (field visits / leadership / certs) */
+.row-list{ display:flex; flex-direction:column; gap:0; border:1px solid var(--line); border-radius:6px; overflow:hidden; background:var(--white); }
+.row-item{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:15px 20px;
+    border-bottom:1px solid var(--line-soft);
+    font-size:14.5px;
+}
+.row-item:last-child{ border-bottom:none; }
+.row-item .dot{ width:6px; height:6px; border-radius:50%; background:var(--amber); flex-shrink:0; }
+.row-item .ri-label{ color:var(--ink); }
+.row-item .ri-tag{ margin-left:auto; font-family:var(--mono); font-size:10.5px; color:var(--ink-soft); white-space:nowrap; }
+
+/* badge grid (workshops/tools) */
+.badge-grid{ display:flex; flex-wrap:wrap; gap:10px; }
+.badge{
+    display:flex; align-items:center; gap:10px;
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:12px 16px;
+    font-size:13.5px;
+    min-width:160px;
+}
+.badge .b-pct{ font-family:var(--mono); font-size:11px; color:var(--teal); margin-left:auto; }
+
+/* ═════════ FEATURED DASHBOARD ═════════ */
+.dash{
+    background:var(--navy-deep);
+    border-radius:10px;
+    padding:36px 36px 30px;
+    color:var(--cream);
+    position:relative;
     overflow:hidden;
 }
+.dash::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 36px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 36px);
+    pointer-events:none;
+}
+.dash-head{ position:relative; z-index:1; margin-bottom:6px; }
+.dash-eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--amber);
+    letter-spacing:0.1em;
+    margin-bottom:8px;
+}
+.dash-head h3{ font-size:24px; margin:0 0 6px; font-weight:600; }
+.dash-head p{ margin:0 0 18px; color:rgba(246,243,236,0.6); font-size:13.5px; max-width:600px; line-height:1.6; }
 
-.progress-bar{
-    height:12px;
-    background:var(--primary);
+.dash-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px; position:relative; z-index:1; }
+.dash-tags span{
+    font-family:var(--mono);
+    font-size:10.5px;
+    padding:5px 10px;
+    border-radius:3px;
+    background:rgba(255,255,255,0.07);
+    border:1px solid rgba(255,255,255,0.12);
+    color:rgba(246,243,236,0.75);
 }
 
-/* MAP */
-#map, #tourismMap{
-    height:400px;
-    border-radius:12px;
+.layer-toggle{
+    display:flex;
+    gap:8px;
+    margin-bottom:16px;
+    flex-wrap:wrap;
+    position:relative; z-index:1;
 }
-
-.card h3{
-    color: var(--primary);
-    margin-bottom: 10px;
+.layer-btn{
+    font-family:var(--mono);
+    font-size:11.5px;
+    padding:8px 14px;
+    border-radius:4px;
+    border:1px solid rgba(255,255,255,0.15);
+    background:rgba(255,255,255,0.03);
+    color:rgba(246,243,236,0.7);
+    cursor:pointer;
+    transition:all 0.2s ease;
 }
+.layer-btn:hover{ border-color:rgba(255,255,255,0.35); color:#fff; }
+.layer-btn.active{ background:var(--amber); border-color:var(--amber); color:var(--navy-deep); font-weight:600; }
 
-.card p{
-    line-height: 1.5;
-}
-
-/* CONTACT */
-.contact-box{
+.dash-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:15px;
+    grid-template-columns:1fr 250px;
+    gap:18px;
+    position:relative; z-index:1;
+}
+@media (max-width:760px){ .dash-grid{ grid-template-columns:1fr; } }
+
+.dash-map-wrap{
+    border-radius:8px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.12);
+}
+#dashMap{ height:380px; width:100%; }
+
+.dash-side{ display:flex; flex-direction:column; gap:14px; }
+.detail-panel{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:8px;
+    padding:16px 18px;
+    flex:1;
+}
+.detail-panel h5{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:0.08em;
+    color:var(--teal-light);
+    margin:0 0 10px;
+}
+.detail-panel .dp-name{ font-size:17px; font-weight:600; margin-bottom:8px; }
+.detail-panel .dp-row{ display:flex; justify-content:space-between; font-size:12.5px; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.06); color:rgba(246,243,236,0.75); }
+.detail-panel .dp-row:last-child{ border-bottom:none; }
+.detail-panel .dp-row b{ color:#fff; font-family:var(--mono); }
+.detail-panel .dp-empty{ font-size:12.5px; color:rgba(246,243,236,0.4); line-height:1.6; }
+
+.legend{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:8px;
+    padding:14px 18px;
+}
+.legend h5{ font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; color:var(--teal-light); margin:0 0 10px; }
+.legend-scale{ display:flex; height:10px; border-radius:3px; overflow:hidden; margin-bottom:6px; }
+.legend-scale div{ flex:1; }
+.legend-labels{ display:flex; justify-content:space-between; font-family:var(--mono); font-size:10px; color:rgba(246,243,236,0.5); }
+
+.stat-strip{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:rgba(255,255,255,0.1);
+    border-radius:8px;
+    overflow:hidden;
+    margin-top:20px;
+    position:relative; z-index:1;
+}
+.stat-cell{
+    background:rgba(255,255,255,0.03);
+    padding:16px 14px;
+    text-align:center;
+}
+.stat-cell .stat-num{ font-size:22px; font-weight:700; font-family:var(--display); }
+.stat-cell .stat-label{ font-family:var(--mono); font-size:10px; color:rgba(246,243,236,0.5); letter-spacing:0.05em; margin-top:4px; }
+@media (max-width:600px){ .stat-strip{ grid-template-columns:repeat(2,1fr); } }
+
+.chart-block{
+    margin-top:22px;
+    position:relative; z-index:1;
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:8px;
+    padding:20px 22px;
+}
+.chart-block h5{ font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; color:var(--teal-light); margin:0 0 4px; }
+.chart-block .ch-sub{ font-size:12px; color:rgba(246,243,236,0.5); margin-bottom:14px; }
+.chart-canvas-wrap{ height:220px; }
+
+.dash-note{
+    margin-top:20px;
+    position:relative; z-index:1;
+    font-size:12px;
+    line-height:1.7;
+    color:rgba(246,243,236,0.5);
+    border-top:1px dashed rgba(255,255,255,0.15);
+    padding-top:16px;
+}
+.dash-note b{ color:rgba(246,243,236,0.85); font-weight:600; }
+
+/* footer */
+.m-footer{
+    margin-top:80px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--ink-soft);
+    text-align:center;
 }
 
-.contact-item{
-    background:var(--card);
-    padding:20px;
-    border-radius:10px;
-    text-align:center;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+/* leaflet info override */
+.info{ display:none; } /* using custom detail panel instead */
+
+@media (max-width:880px){
+    .shell{ flex-direction:column; }
+    .sidebar{ width:100%; height:auto; position:relative; }
+    .main-inner{ padding:40px 24px 70px; }
 }
 
-/* FOOTER */
-footer{
-    text-align:center;
-    padding:15px;
-    background:var(--primary);
-    color:white;
+@media print{
+    .sidebar .btn-print, .mini-nav{ display:none !important; }
+    .graticule{ display:none; }
+    .shell{ display:block; }
+    .sidebar{ position:static; height:auto; width:100%; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAV -->
-<nav>
-    <div class="logo">Dipesh CV</div>
+<div class="shell">
 
-    <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#education">Education</a></li>
-        <li><a href="#map-section">Location</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contacts">Contact</a></li>
-        <li><a href="#tourism">Tourism Dashboard</a></li>
-    </ul>
+    <!-- ═════════ SIDEBAR ═════════ -->
+    <aside class="sidebar">
+        <div class="avatar">
+            <span class="initials">DP</span>
+            <span class="add-photo">+</span>
+        </div>
+        <div class="s-name">Dipesh Prajapati</div>
+        <div class="s-role">Geomatics Engineering<br>Undergraduate</div>
 
-    <div class="top-actions">
-        <button class="btn btn-dark" onclick="toggleDark()">🌙 Dark Mode</button>
-        <button class="btn btn-pdf" onclick="downloadPDF()">📄 Download CV</button>
-    </div>
-</nav>
+        <div class="s-coord">27.6192°N · 85.5388°E<br>KATHMANDU VALLEY, NEPAL</div>
 
-<!-- DASHBOARD -->
-<section class="dashboard">
-    <h1>Dipesh Prajapati</h1>
-    <p>Geomatics Engineer</p>
-</section>
-
-<!-- HOME -->
-<section id="home">
-    <h2 class="section-title">Home</h2>
-    <div class="card">
-        I am a hardworking and dedicated individual with a strong passion for learning and personal growth. I am highly motivated, reliable, and committed to giving my best in every task I undertake. I enjoy taking on challenges, improving my skills, and adapting to new environments. I am focused on building a responsible and disciplined approach toward work while continuously striving to achieve better results and contribute positively wherever I work.    </div>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-    <h2 class="section-title">About</h2>
-    <div class="card">
-        I am Dipesh Prajapati, a Geomatics Engineering student with a strong interest in geospatial technologies, surveying, remote sensing, and GIS applications. I am passionate about applying spatial data analysis and modern geoinformation tools to solve real-world problems in planning, mapping, and infrastructure development. I am a motivated and detail-oriented learner seeking opportunities to enhance my technical skills and contribute effectively to geospatial and engineering projects.
-    </div>
-</section>
-
-<!-- SKILLS -->
-<section id="skills">
-    <h2 class="section-title">Skills</h2>
-
-    <p>GIS</p>
-    <div class="progress"><div class="progress-bar" style="width:90%"></div></div>
-
-    <p>Remote Sensing</p>
-    <div class="progress"><div class="progress-bar" style="width:85%"></div></div>
-
-    <p>Surveying</p>
-    <div class="progress"><div class="progress-bar" style="width:88%"></div></div>
-
-    <p>HTML / CSS</p>
-    <div class="progress"><div class="progress-bar" style="width:80%"></div></div>
-
-     <p>Python</p>
-    <div class="progress"><div class="progress-bar" style="width:90%"></div></div>
-
-     <p>Java</p>
-    <div class="progress"><div class="progress-bar" style="width:90%"></div></div>
-</section>
-
-<!-- EDUCATION -->
-<section id="education">
-    <h2 class="section-title">Education</h2>
-
-    <div class="card" onclick="goToLocation('khwopa')" style="cursor:pointer;">
-        <h3>+2 Level</h3>
-        <p>Khwopa Secondary School</p>
-        <small>📍 Click to view location</small>
-    </div>
-
-    <div class="card" onclick="goToLocation('ku')" style="cursor:pointer;">
-        <h3>Bachelor</h3>
-        <p>Kathmandu University - Geomatics Engineering</p>
-        <small>📍 Click to view location</small>
-    </div>
-</section>
-
-<!-- MAP -->
-<section id="map-section">
-    <h2 class="section-title">Locations</h2>
-    <div id="map"></div>
-</section>
-
-<!-- PROJECTS -->
-<section id="projects">
-    <h2 class="section-title">Projects</h2>
-
-    <div class="card">
-        <h3>🛰️ Land Use / Land Cover (LULC) Mapping</h3>
-        <p>
-            Performed supervised and unsupervised classification of satellite imagery.
-            Identified forest, urban, water, and agricultural land using GIS tools like QGIS and ArcGIS.
-        </p>
-    </div>
-
-    <div class="card">
-        <h3>🏗️ Digital Elevation Model (DEM) Analysis</h3>
-        <p>
-            Generated slope, elevation, and terrain analysis using DEM data for environmental and hazard studies.
-        </p>
-    </div>
-
-    <div class="card">
-        <h3>🌊 Flood Risk Mapping</h3>
-        <p>
-            Created flood hazard maps using elevation, rainfall, and land use data for disaster risk assessment.
-        </p>
-    </div>
-
-    <div class="card">
-        <h3>🏙️ Urban Growth Analysis</h3>
-        <p>
-            Analyzed urban expansion using multi-temporal satellite images to study city growth patterns.
-        </p>
-    </div>
-
-    <div class="card">
-        <h3>📡 GPS Survey Project</h3>
-        <p>
-            Collected field data using GPS devices and processed coordinates for spatial mapping and analysis.
-        </p>
-    </div>
-
-</section>
-
-<!-- CONTACT -->
-<section id="contacts">
-    <h2 class="section-title">Contact Me</h2>
-
-    <div class="contact-box">
-
-        <div class="contact-item">
-            📍 <h3>Address</h3>
-            <p>Thimi, Bhaktapur</p>
+        <div class="s-block">
+            <h4>CONTACT</h4>
+            <div class="s-contact-item"><span class="ico">📍</span><span>Thimi, Bhaktapur, Nepal</span></div>
+            <div class="s-contact-item"><span class="ico">📞</span><a href="tel:+9779840076257">+977-9840076257</a></div>
+            <div class="s-contact-item"><span class="ico">✉️</span><a href="mailto:dipeshpraja70@gmail.com">dipeshpraja70@gmail.com</a></div>
+            <div class="s-contact-item"><span class="ico">🔗</span><a href="https://linkedin.com/in/dipesh-prajapati-b997b2357" target="_blank" rel="noopener">LinkedIn Profile</a></div>
         </div>
 
-        <div class="contact-item">
-            📧 <h3>Email</h3>
-            <p>dipeshpraja70@gmail.com</p>
+        <div class="s-block">
+            <h4>GIS &amp; GEOSPATIAL</h4>
+            <div class="tag-group">
+                <span class="tag">GIS</span>
+                <span class="tag">Remote Sensing</span>
+                <span class="tag">Surveying</span>
+                <span class="tag">WebGIS</span>
+                <span class="tag">Cartography</span>
+                <span class="tag">GPS Survey</span>
+            </div>
         </div>
 
-        <div class="contact-item">
-            📞 <h3>Phone</h3>
-            <p>+977-9840076257</p>
+        <div class="s-block">
+            <h4>PROGRAMMING</h4>
+            <div class="tag-group">
+                <span class="tag">Python</span>
+                <span class="tag">Java</span>
+                <span class="tag">HTML</span>
+                <span class="tag">CSS</span>
+                <span class="tag">JavaScript</span>
+            </div>
         </div>
 
-        <div class="contact-item">
-            🌐 <h3>Social</h3>
-            <p>linkedin.com/in/dipesh-prajapati-b997b2357</p>
+        <div class="s-block">
+            <h4>PLATFORMS &amp; TOOLS</h4>
+            <div class="tag-group">
+                <span class="tag">QGIS</span>
+                <span class="tag">ArcGIS</span>
+                <span class="tag">Leaflet.js</span>
+            </div>
         </div>
 
-    </div>
-</section>
+        <div class="s-block">
+            <button class="btn-print" onclick="window.print()">↓ Save as PDF</button>
+        </div>
+    </aside>
 
-<!-- GIS DASHBOARD (LAST) -->
-<section id="tourism">
-    <h2 class="section-title">Tourism Choropleth Dashboard</h2>
-    <div id="tourismMap"></div>
-</section>
+    <!-- ═════════ MAIN ═════════ -->
+    <main class="main">
+        <div class="graticule"></div>
+        <div class="main-inner">
 
-<!-- FOOTER -->
-<footer>
-    © Dipesh Prajapati
-</footer>
+            <nav class="mini-nav">
+                <a href="#profile">Profile</a>
+                <a href="#education">Education</a>
+                <a href="#fieldwork">Field &amp; Survey Work</a>
+                <a href="#projects">Academic Projects</a>
+                <a href="#practice">Workshops &amp; Practice</a>
+                <a href="#dashboard">Featured WebGIS Project</a>
+            </nav>
+
+            <!-- PROFILE -->
+            <section class="m-section" id="profile">
+                <div class="section-head">
+                    <span class="eyebrow">01 — PROFILE</span>
+                    <h2>Professional Profile</h2>
+                    <div class="rule"></div>
+                </div>
+                <p class="prose">
+                    Motivated <b>Geomatics Engineering</b> undergraduate with a strong interest in
+                    geospatial technologies, surveying, remote sensing, and GIS applications.
+                    Passionate about applying spatial data analysis and modern geoinformation tools
+                    to solve real-world problems in planning, mapping, and infrastructure development.
+                    A detail-oriented learner, reliable under pressure, and committed to building a
+                    disciplined, responsible approach to every project.
+                </p>
+            </section>
+
+            <!-- EDUCATION -->
+            <section class="m-section" id="education">
+                <div class="section-head">
+                    <span class="eyebrow">02 — TIMELINE</span>
+                    <h2>Education</h2>
+                    <div class="rule"></div>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="tl-period">BACHELOR'S DEGREE</div>
+                        <h3>Kathmandu University</h3>
+                        <p>B.E. Geomatics Engineering · Dhulikhel, Nepal</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="tl-period">+2 LEVEL</div>
+                        <h3>Khwopa Secondary School</h3>
+                        <p>Dekocha, Bhaktapur-6, Nepal</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FIELD & SURVEY WORK -->
+            <section class="m-section" id="fieldwork">
+                <div class="section-head">
+                    <span class="eyebrow">03 — FIELDWORK</span>
+                    <h2>Field &amp; Survey Work</h2>
+                    <div class="rule"></div>
+                </div>
+                <div class="row-list">
+                    <div class="row-item"><span class="dot"></span><span class="ri-label">GPS Survey — field data collection &amp; coordinate processing for spatial mapping</span><span class="ri-tag">GPS / GNSS</span></div>
+                    <div class="row-item"><span class="dot"></span><span class="ri-label">Topographic survey practical exercises</span><span class="ri-tag">TOTAL STATION</span></div>
+                    <div class="row-item"><span class="dot"></span><span class="ri-label">Satellite imagery acquisition &amp; preprocessing for classification work</span><span class="ri-tag">REMOTE SENSING</span></div>
+                </div>
+            </section>
+
+            <!-- ACADEMIC PROJECTS -->
+            <section class="m-section" id="projects">
+                <div class="section-head">
+                    <span class="eyebrow">04 — COURSEWORK</span>
+                    <h2>Academic Projects</h2>
+                    <div class="rule"></div>
+                </div>
+
+                <div class="card featured-project">
+                    <span class="c-id">PRJ.00 · WEBGIS · FULL APPLICATION</span>
+                    <h3>🛡️ Safe Nepal — Tourist Safety System</h3>
+                    <p>
+                        A full-stack tourism geospatial mini-project: interactive tourist-destination
+                        mapping, crowd-sourced safety reporting, five real administrative boundary
+                        layers (country, province, district, municipality, ward), and live TomTom
+                        traffic flow &amp; incident data layered over Leaflet.js, with Turf.js-powered
+                        spatial analysis tools (distance, buffer, nearest-location, area).
+                    </p>
+                    <div class="proj-tags">
+                        <span>Leaflet.js</span>
+                        <span>Turf.js</span>
+                        <span>Node.js / Express</span>
+                        <span>GeoJSON</span>
+                        <span>TomTom Traffic API</span>
+                    </div>
+                    <a class="btn-view-project" href="safe-nepal.html" target="_blank" rel="noopener">
+                        View Project ↗
+                    </a>
+                </div>
+
+                <div class="card-grid" style="margin-top:16px;">
+                    <div class="card">
+                        <span class="c-id">PRJ.01 · CLASSIFICATION</span>
+                        <h3>🛰️ Land Use / Land Cover Mapping</h3>
+                        <p>Supervised and unsupervised classification of satellite imagery to identify forest, urban, water, and agricultural land using QGIS and ArcGIS.</p>
+                    </div>
+                    <div class="card">
+                        <span class="c-id">PRJ.02 · TERRAIN</span>
+                        <h3>🏗️ Digital Elevation Model Analysis</h3>
+                        <p>Slope, elevation, and terrain analysis from DEM data for environmental and hazard studies.</p>
+                    </div>
+                    <div class="card">
+                        <span class="c-id">PRJ.03 · HAZARD</span>
+                        <h3>🌊 Flood Risk Mapping</h3>
+                        <p>Flood hazard maps built from elevation, rainfall, and land use data for disaster risk assessment.</p>
+                    </div>
+                    <div class="card">
+                        <span class="c-id">PRJ.04 · CHANGE DETECTION</span>
+                        <h3>🏙️ Urban Growth Analysis</h3>
+                        <p>Multi-temporal satellite image analysis to study urban expansion and city growth patterns.</p>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- WORKSHOPS & PRACTICE (reframed skills) -->
+            <section class="m-section" id="practice">
+                <div class="section-head">
+                    <span class="eyebrow">05 — PRACTICE</span>
+                    <h2>Workshops &amp; Tools Practiced</h2>
+                    <div class="rule"></div>
+                </div>
+                <div class="badge-grid">
+                    <div class="badge">🗺️ GIS Mapping &amp; Analysis<span class="b-pct">90%</span></div>
+                    <div class="badge">🛰️ Remote Sensing<span class="b-pct">85%</span></div>
+                    <div class="badge">📐 Surveying<span class="b-pct">88%</span></div>
+                    <div class="badge">🐍 Python for Geospatial<span class="b-pct">90%</span></div>
+                    <div class="badge">☕ Java<span class="b-pct">90%</span></div>
+                    <div class="badge">💻 HTML / CSS / WebGIS<span class="b-pct">80%</span></div>
+                </div>
+            </section>
+
+            <!-- FEATURED WEBGIS DASHBOARD -->
+            <section class="m-section" id="dashboard">
+                <div class="section-head">
+                    <span class="eyebrow">06 — FEATURED WEBGIS PROJECT</span>
+                    <h2>Interactive Dashboard</h2>
+                    <div class="rule"></div>
+                </div>
+
+                <div class="dash">
+                    <div class="dash-head">
+                        <div class="dash-eyebrow">CASE STUDY</div>
+                        <h3>Nepal Tourism &amp; Population</h3>
+                        <p>An interactive district-level choropleth comparing relative tourism activity against population, built to practice WebGIS dashboard design with live hover interaction and chart-linked data.</p>
+                    </div>
+
+                    <div class="dash-tags">
+                        <span>Leaflet.js</span>
+                        <span>Chart.js</span>
+                        <span>Choropleth Mapping</span>
+                        <span>GeoJSON</span>
+                        <span>Hover Detail Panel</span>
+                    </div>
+
+                    <div class="layer-toggle">
+                        <button class="layer-btn active" id="btnTourism" onclick="setLayer('tourism')">🗺 Tourism Index</button>
+                        <button class="layer-btn" id="btnPopulation" onclick="setLayer('population')">👥 Population (est.)</button>
+                    </div>
+
+                    <div class="dash-grid">
+                        <div class="dash-map-wrap"><div id="dashMap"></div></div>
+
+                        <div class="dash-side">
+                            <div class="detail-panel" id="detailPanel">
+                                <h5>DISTRICT DETAILS</h5>
+                                <div class="dp-empty" id="dpEmpty">Hover over any district on the map to see detailed information here.</div>
+                                <div id="dpContent" style="display:none;">
+                                    <div class="dp-name" id="dpName">—</div>
+                                    <div class="dp-row"><span>Tourism Index</span><b id="dpTourism">—</b></div>
+                                    <div class="dp-row"><span>Population (est.)</span><b id="dpPop">—</b></div>
+                                    <div class="dp-row"><span>Province</span><b id="dpProvince">—</b></div>
+                                </div>
+                            </div>
+                            <div class="legend">
+                                <h5 id="legendTitle">LEGEND — TOURISM INDEX</h5>
+                                <div class="legend-scale">
+                                    <div style="background:#C9DEDE"></div>
+                                    <div style="background:#6FA5A5"></div>
+                                    <div style="background:#2B6E6E"></div>
+                                    <div style="background:#16243F"></div>
+                                    <div style="background:#0E1830"></div>
+                                </div>
+                                <div class="legend-labels"><span>LOW</span><span>HIGH</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-strip">
+                        <div class="stat-cell"><div class="stat-num">8</div><div class="stat-label">DISTRICTS</div></div>
+                        <div class="stat-cell"><div class="stat-num">3.9M</div><div class="stat-label">POPULATION (EST.)</div></div>
+                        <div class="stat-cell"><div class="stat-num">Kathmandu</div><div class="stat-label">TOP DISTRICT</div></div>
+                        <div class="stat-cell"><div class="stat-num">2026</div><div class="stat-label">DATA YEAR</div></div>
+                    </div>
+
+                    <div class="chart-block">
+                        <h5>TOURISM INDEX BY DISTRICT</h5>
+                        <div class="ch-sub">Relative index (0–100) across the eight districts mapped above</div>
+                        <div class="chart-canvas-wrap"><canvas id="tourismChart"></canvas></div>
+                    </div>
+
+                    <div class="dash-note">
+                        <b>Preprocessing.</b> District polygons are illustrative bounding boxes built for prototyping purposes; for production use these would be replaced with verified administrative boundaries (e.g. from the Survey Department of Nepal), simplified with the Douglas–Peucker algorithm for lightweight web rendering. Tourism Index and population figures are illustrative estimates used to demonstrate the dashboard interaction pattern, not official statistics.
+                    </div>
+                </div>
+            </section>
+
+            <div class="m-footer">
+                © 2026 DIPESH PRAJAPATI · GEOMATICS ENGINEERING · BUILT WITH LEAFLET.JS &amp; CHART.JS
+            </div>
+
+        </div>
+    </main>
+</div>
 
 <!-- LEAFLET -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- CHART.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 
 <script>
 
-// MAP INIT
-var map = L.map('map').setView([27.7172, 85.3240], 11);
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap'
-}).addTo(map);
-
-// ✅ CORRECT LOCATIONS
-var khwopa = [27.678008419778127, 85.43299868465672]; // Dekocha, Bhaktapur-6,27.678008419778127, 85.43299868465672
-var ku = [27.6192, 85.5388];     // Kathmandu University
-
-var marker;
-
-// CLICK FUNCTION
-function goToLocation(place){
-
-    if(marker){
-        map.removeLayer(marker);
-    }
-
-    if(place === "khwopa"){
-        map.setView(khwopa, 17);
-        marker = L.marker(khwopa).addTo(map)
-        .bindPopup("🏫 Khwopa Secondary School<br>Dekocha, Bhaktapur-6, Nepal")
-        .openPopup();
-    }
-
-    if(place === "ku"){
-        map.setView(ku, 16);
-        marker = L.marker(ku).addTo(map)
-        .bindPopup("🎓 Kathmandu University<br>Dhulikhel, Nepal")
-        .openPopup();
-    }
-}
-
-var tourismMap = L.map('tourismMap').setView([27.7,85.3], 10);
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(tourismMap);
-
-// GeoJSON DATA
-var data = {
+// ───────── DASHBOARD DATA ─────────
+var districtData = {
 "type":"FeatureCollection",
 "features":[
-{"type":"Feature","properties":{"name":"Kathmandu","tourism":95},"geometry":{"type":"Polygon","coordinates":[[[85.25,27.75],[85.35,27.75],[85.35,27.65],[85.25,27.65],[85.25,27.75]]]}},
-{"type":"Feature","properties":{"name":"Bhaktapur","tourism":80},"geometry":{"type":"Polygon","coordinates":[[[85.40,27.72],[85.48,27.72],[85.48,27.66],[85.40,27.66],[85.40,27.72]]]}},
-{"type":"Feature","properties":{"name":"Lalitpur","tourism":88},"geometry":{"type":"Polygon","coordinates":[[[85.28,27.68],[85.36,27.68],[85.36,27.60],[85.28,27.60],[85.28,27.68]]]}},
-{
-"type":"Feature",
-"properties":{"name":"Pokhara","tourism":92},
-"geometry":{"type":"Polygon","coordinates":[[[83.95,28.25],[84.05,28.25],[84.05,28.15],[83.95,28.15],[83.95,28.25]]]}
-},
-{
-"type":"Feature",
-"properties":{"name":"Chitwan","tourism":85},
-"geometry":{"type":"Polygon","coordinates":[[[84.40,27.70],[84.55,27.70],[84.55,27.55],[84.40,27.55],[84.40,27.70]]]}
-},
-{
-"type":"Feature",
-"properties":{"name":"Lumbini","tourism":90},
-"geometry":{"type":"Polygon","coordinates":[[[83.50,27.55],[83.65,27.55],[83.65,27.40],[83.50,27.40],[83.50,27.55]]]}
-},
-{
-"type":"Feature",
-"properties":{"name":"Mustang","tourism":75},
-"geometry":{"type":"Polygon","coordinates":[[[83.80,29.20],[84.20,29.20],[84.20,28.90],[83.80,28.90],[83.80,29.20]]]}
-},
-{
-"type":"Feature",
-"properties":{"name":"Manang","tourism":70},
-"geometry":{"type":"Polygon","coordinates":[[[84.20,28.90],[84.50,28.90],[84.50,28.60],[84.20,28.60],[84.20,28.90]]]}
-}
+{"type":"Feature","properties":{"name":"Kathmandu","province":"Bagmati","tourism":95,"population":2041587},"geometry":{"type":"Polygon","coordinates":[[[85.25,27.75],[85.35,27.75],[85.35,27.65],[85.25,27.65],[85.25,27.75]]]}},
+{"type":"Feature","properties":{"name":"Bhaktapur","province":"Bagmati","tourism":80,"population":429759},"geometry":{"type":"Polygon","coordinates":[[[85.40,27.72],[85.48,27.72],[85.48,27.66],[85.40,27.66],[85.40,27.72]]]}},
+{"type":"Feature","properties":{"name":"Lalitpur","province":"Bagmati","tourism":88,"population":513566},"geometry":{"type":"Polygon","coordinates":[[[85.28,27.68],[85.36,27.68],[85.36,27.60],[85.28,27.60],[85.28,27.68]]]}},
+{"type":"Feature","properties":{"name":"Pokhara (Kaski)","province":"Gandaki","tourism":92,"population":561135},"geometry":{"type":"Polygon","coordinates":[[[83.95,28.25],[84.05,28.25],[84.05,28.15],[83.95,28.15],[83.95,28.25]]]}},
+{"type":"Feature","properties":{"name":"Chitwan","province":"Bagmati","tourism":85,"population":679819},"geometry":{"type":"Polygon","coordinates":[[[84.40,27.70],[84.55,27.70],[84.55,27.55],[84.40,27.55],[84.40,27.70]]]}},
+{"type":"Feature","properties":{"name":"Lumbini (Rupandehi)","province":"Lumbini","tourism":90,"population":880196},"geometry":{"type":"Polygon","coordinates":[[[83.50,27.55],[83.65,27.55],[83.65,27.40],[83.50,27.40],[83.50,27.55]]]}},
+{"type":"Feature","properties":{"name":"Mustang","province":"Gandaki","tourism":75,"population":13452},"geometry":{"type":"Polygon","coordinates":[[[83.80,29.20],[84.20,29.20],[84.20,28.90],[83.80,28.90],[83.80,29.20]]]}},
+{"type":"Feature","properties":{"name":"Manang","province":"Gandaki","tourism":70,"population":5658},"geometry":{"type":"Polygon","coordinates":[[[84.20,28.90],[84.50,28.90],[84.50,28.60],[84.20,28.60],[84.20,28.90]]]}}
 ]
 };
 
-// COLOR FUNCTION
-function getColor(d){
-return d>90?'#800026':
-       d>80?'#BD0026':
-       d>70?'#E31A1C':
-       d>60?'#FC4E2A':
-       '#FFEDA0';
+var activeLayer = 'tourism';
+var tourismColors = ['#C9DEDE','#6FA5A5','#2B6E6E','#16243F','#0E1830'];
+var popColors = ['#E8D9C2','#D9B98A','#C97D2E','#8C5520','#5A3614'];
+
+function getColor(value, breaks, colors){
+    for(var i=0;i<breaks.length;i++){
+        if(value <= breaks[i]) return colors[i];
+    }
+    return colors[colors.length-1];
 }
 
-function style(feature){
-return {
-fillColor:getColor(feature.properties.tourism),
-weight:2,
-color:"#fff",
-fillOpacity:0.7
-};
+function tourismColor(v){
+    return v>90?tourismColors[4]: v>80?tourismColors[3]: v>70?tourismColors[2]: v>60?tourismColors[1]: tourismColors[0];
+}
+function popColor(v){
+    return v>1000000?popColors[4]: v>500000?popColors[3]: v>100000?popColors[2]: v>20000?popColors[1]: popColors[0];
 }
 
-// INFO BOX
-var info = L.control();
-
-info.onAdd=function(){
-this._div=L.DomUtil.create('div','info');
-this.update();
-return this._div;
-};
-
-info.update=function(props){
-this._div.innerHTML="<h4>Tourism Index</h4>"+(props?
-"<b>"+props.name+"</b><br>"+props.tourism+"/100"
-:"Hover over region");
-};
-
-info.addTo(tourismMap);
-
-// HOVER EFFECT
-function highlight(e){
-var layer=e.target;
-layer.setStyle({weight:3,color:"#666"});
-info.update(layer.feature.properties);
+function styleFeature(feature){
+    var v = activeLayer === 'tourism' ? feature.properties.tourism : feature.properties.population;
+    var fill = activeLayer === 'tourism' ? tourismColor(v) : popColor(v);
+    return { fillColor: fill, weight:1.5, color:"#F6F3EC", fillOpacity:0.85 };
 }
 
-function reset(e){
-geojson.resetStyle(e.target);
-info.update();
+function fmtPop(n){
+    if(n >= 1000000) return (n/1000000).toFixed(1)+'M';
+    if(n >= 1000) return (n/1000).toFixed(0)+'K';
+    return n.toString();
 }
 
-function onEachFeature(feature,layer){
-layer.on({
-mouseover:highlight,
-mouseout:reset
+function showDetail(props){
+    document.getElementById('dpEmpty').style.display='none';
+    document.getElementById('dpContent').style.display='block';
+    document.getElementById('dpName').textContent = props.name;
+    document.getElementById('dpTourism').textContent = props.tourism + ' / 100';
+    document.getElementById('dpPop').textContent = fmtPop(props.population);
+    document.getElementById('dpProvince').textContent = props.province;
+}
+function clearDetail(){
+    document.getElementById('dpEmpty').style.display='block';
+    document.getElementById('dpContent').style.display='none';
+}
+
+function highlightFeature(e){
+    var layer = e.target;
+    layer.setStyle({ weight:3, color:"#C97D2E" });
+    showDetail(layer.feature.properties);
+}
+function resetFeature(e){
+    geojsonLayer.resetStyle(e.target);
+    clearDetail();
+}
+function onEachDistrict(feature, layer){
+    layer.on({ mouseover:highlightFeature, mouseout:resetFeature });
+    layer.bindTooltip(feature.properties.name, {sticky:true});
+}
+
+var dashMap = L.map('dashMap', {scrollWheelZoom:false}).setView([27.7,84.6], 6.6);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'&copy; OpenStreetMap' }).addTo(dashMap);
+
+var geojsonLayer = L.geoJson(districtData, {
+    style: styleFeature,
+    onEachFeature: onEachDistrict
+}).addTo(dashMap);
+
+function setLayer(layer){
+    activeLayer = layer;
+    geojsonLayer.setStyle(styleFeature);
+    document.getElementById('btnTourism').classList.toggle('active', layer==='tourism');
+    document.getElementById('btnPopulation').classList.toggle('active', layer==='population');
+    document.getElementById('legendTitle').textContent = layer === 'tourism' ? 'LEGEND — TOURISM INDEX' : 'LEGEND — POPULATION';
+    var scale = document.querySelector('.legend-scale');
+    var colors = layer === 'tourism' ? tourismColors : popColors;
+    scale.innerHTML = colors.map(function(c){ return '<div style="background:'+c+'"></div>'; }).join('');
+}
+
+// ───────── CHART.JS BAR CHART ─────────
+var ctx = document.getElementById('tourismChart').getContext('2d');
+var labels = districtData.features.map(function(f){ return f.properties.name; });
+var values = districtData.features.map(function(f){ return f.properties.tourism; });
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Tourism Index',
+            data: values,
+            backgroundColor: '#2B6E6E',
+            borderRadius: 3,
+            maxBarThickness: 34
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display:false } },
+        scales: {
+            x: { ticks: { color:'rgba(246,243,236,0.6)', font:{family:"'JetBrains Mono'", size:10} }, grid:{ color:'rgba(255,255,255,0.06)' } },
+            y: { beginAtZero:true, max:100, ticks:{ color:'rgba(246,243,236,0.5)', font:{family:"'JetBrains Mono'", size:10} }, grid:{ color:'rgba(255,255,255,0.06)' } }
+        }
+    }
 });
-}
-
-var geojson=L.geoJson(data,{
-style:style,
-onEachFeature:onEachFeature
-}).addTo(tourismMap);
 
 </script>
 
